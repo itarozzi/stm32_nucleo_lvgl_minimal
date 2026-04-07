@@ -15,7 +15,7 @@ Use EEZ-Studio v0.26.2 and EEZ-Flow to create UI and some UI automations.
 https://www.envox.eu/studio/studio-introduction/
 
 
-![demo1](./docs/demo_img1.jpg)
+![demo1](./docs/demo_img2.jpg)
 
 
 
