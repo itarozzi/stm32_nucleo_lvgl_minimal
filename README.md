@@ -117,12 +117,17 @@ Created a Native User Actions `btn_pressed` and assignet to PRESSED event handle
 
 You have to implment action callback as suggested by EEZ-Studio. I created a dedicated `ui_logic.c` file. In the `action_btn_pressed()` callback I assign directly the text value of the label `label_test`.
 
+![eez-studio page 1](./docs/eez1.png)
+
 ## Native Action: Switch Led
 
 Created a Native User Actions `switch_led`. Then created a SetVariable Flow Node connected to the PRESSED event of the Led in Page2. It switch an internal variable `led_active' used to set the led brightness. Finally the flow calls the `switch_led` native actions, and the callback associated.
 The callback is defined in `ui_logic.c` and toggle the physical LED connected to pin PA5.
 
 This demonstrate how to execute HW-related code when a UI action is performed.
+
+![eez-studio page 2](./docs/eez2.png)
+
 
 ## Native Variable: Blue Button Counter
 
@@ -134,6 +139,7 @@ The Flow Node `Watch`, `Compare` and `SetVariable` are used to read the value of
 
 This demonstrate how to set UI variables depending on HW states or values, display the values in UI and use EEZ-Flow to perform additional logic.
 
+![eez-studio page 2b](./docs/eez3.png)
 
 ## Page Change
 
