@@ -95,10 +95,46 @@ SPI3 is used for touch panel.
 
 
 
-
 ![cubemx_options2](./docs/cubemx_img2.png)
 
 ![cubemx_options3](./docs/cubemx_img3.png)
 
 
 
+
+# EEZ-Studio and EEZ-Flow
+
+I use EEZ-Studio to design UI and generate LVGL code.  The demo consists of 2 pages.
+
+I also enabled EEZ-Flow to use some UI automation using visual programming. Usefull for page changes, set/display variables, ...
+
+The vars and action described here are just for educational purpose, to demonstrate how to make UI and code interact.
+
+
+## Native Actions: Button callback
+
+Created a Native User Actions `btn_pressed` and assignet to PRESSED event handler of the Button in Main Page.  It calls the native actions each time is pressed.
+
+You have to implment action callback as suggested by EEZ-Studio. I created a dedicated `ui_logic.c` file. In the `action_btn_pressed()` callback I assign directly the text value of the label `label_test`.
+
+## Native Action: Switch Led
+
+Created a Native User Actions `switch_led`. Then created a SetVariable Flow Node connected to the PRESSED event of the Led in Page2. It switch an internal variable `led_active' used to set the led brightness. Finally the flow calls the `switch_led` native actions, and the callback associated.
+The callback is defined in `ui_logic.c` and toggle the physical LED connected to pin PA5.
+
+This demonstrate how to execute HW-related code when a UI action is performed.
+
+## Native Variable: Blue Button Counter
+
+Created a Native Variable `blue_button_press_cnt` as integer. As suggested by EEZ-Studio, you have to implement setter and getter in your native code.  I done this in `ui_logic.c` and exported the `blue_button_press_cnt` definition as external in `ui_logic.h`.
+
+Finally I read the state of the on-board blue button (connected to `GPIO_EXTI13`) and when pressed I increment the value of blue_button_press_cnt, using the setter function. This is notified to UI. The new value is displayed in the `labelBlueButton` in Main Page.
+
+The Flow Node `Watch`, `Compare` and `SetVariable` are used to read the value of `blue_button_press_cnt` and reset it when the value of 5 is reached.
+
+This demonstrate how to set UI variables depending on HW states or values, display the values in UI and use EEZ-Flow to perform additional logic.
+
+
+## Page Change
+
+The page changes from Main Page to Page1 and returns are performed directly with eez-flow nodes connected to PRESSED event of the buttons in the bottom of the page.
