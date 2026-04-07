@@ -1,3 +1,4 @@
+#include "main.h"
 #include "ui/actions.h"
 #include "ui/ui.h"
 #include "ui/screens.h"
@@ -15,10 +16,18 @@ int _gettimeofday(struct timeval *tv, void *tz) {
     return 0;
 }
 
+
+// Callback from UI used to assign UI label directly
 void action_btn_pressed(lv_event_t *e) {
     // TODO: Implement action btn_pressed here
 
         click_cnt++;
 
         lv_label_set_text_fmt(objects.label_test, "You clicked me\n%d times", click_cnt);
+}
+
+
+//  Callback from UI used to command Nucleo builtin led
+void action_switch_led(lv_event_t *e) {
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 }

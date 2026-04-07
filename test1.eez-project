@@ -121,6 +121,16 @@
       "userProperties": [],
       "name": "btn_pressed",
       "implementationType": "native"
+    },
+    {
+      "objID": "c7ad9c5f-cf0b-4319-f655-b8fa645b4802",
+      "components": [],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "switch_led",
+      "implementationType": "native"
     }
   ],
   "userPages": [
@@ -347,7 +357,7 @@
               "objID": "9c1a748e-f54a-48cd-c2d7-53e04a914eed",
               "type": "LVGLButtonWidget",
               "left": 275,
-              "top": 203,
+              "top": 202,
               "width": 47,
               "height": 39,
               "customInputs": [],
@@ -652,8 +662,8 @@
             {
               "objID": "23e9e326-3e51-4f74-e087-23004281984d",
               "type": "LVGLButtonWidget",
-              "left": -2,
-              "top": 203,
+              "left": 277,
+              "top": 201,
               "width": 47,
               "height": 39,
               "customInputs": [],
@@ -806,6 +816,58 @@
               "textType": "expression",
               "longMode": "WRAP",
               "recolor": false
+            },
+            {
+              "objID": "20d204b3-3220-4e7c-8f55-c95c650827c3",
+              "type": "LVGLLedWidget",
+              "left": 11,
+              "top": 196,
+              "width": 32,
+              "height": 32,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "d6fa05bb-381e-40a0-eada-f4714579b8ad",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [
+                {
+                  "objID": "dcc5cc4e-980c-4451-8e9c-a3f34b93d2b3",
+                  "eventName": "PRESSED",
+                  "handlerType": "flow",
+                  "action": "btn_pressed",
+                  "userData": 0
+                }
+              ],
+              "identifier": "onboard_led",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "px",
+              "heightUnit": "px",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlag": true,
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "localStyles": {
+                "objID": "c1710f7a-2349-4ee5-bb52-ba31d33c3468"
+              },
+              "group": "",
+              "groupIndex": 0,
+              "color": "#00FF00",
+              "colorType": "literal",
+              "brightness": "led_active?255:0",
+              "brightnessType": "expression"
             }
           ],
           "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
@@ -830,8 +892,8 @@
         {
           "objID": "05d5f955-2e78-4885-ad67-a607ea953622",
           "type": "LVGLActionComponent",
-          "left": 117,
-          "top": 283,
+          "left": 375,
+          "top": 254,
           "width": 329,
           "height": 54,
           "customInputs": [],
@@ -848,6 +910,38 @@
               "delayType": "literal"
             }
           ]
+        },
+        {
+          "objID": "f70e32e0-aa9f-466c-f99d-634e784f033d",
+          "type": "SetVariableActionComponent",
+          "left": 97,
+          "top": 357,
+          "width": 195,
+          "height": 57,
+          "customInputs": [],
+          "customOutputs": [],
+          "entries": [
+            {
+              "objID": "d2030037-b776-47a4-97cd-e11fd258335b",
+              "variable": "led_active",
+              "value": "!led_active"
+            }
+          ]
+        },
+        {
+          "objID": "40e88816-ced6-43fc-ee75-14faafcdd28c",
+          "type": "CallActionActionComponent",
+          "left": 320,
+          "top": 386,
+          "width": 94,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": [],
+          "action": "switch_led",
+          "userPropertyValues": {
+            "objID": "8feba7af-feeb-4801-f55e-b4c9119f7925",
+            "values": {}
+          }
         }
       ],
       "connectionLines": [
@@ -857,6 +951,20 @@
           "output": "PRESSED",
           "target": "05d5f955-2e78-4885-ad67-a607ea953622",
           "input": "@seqin"
+        },
+        {
+          "objID": "2aef4e59-3817-4faa-d6fa-8e93a1a03291",
+          "source": "20d204b3-3220-4e7c-8f55-c95c650827c3",
+          "output": "PRESSED",
+          "target": "f70e32e0-aa9f-466c-f99d-634e784f033d",
+          "input": "@seqin"
+        },
+        {
+          "objID": "999d39a7-c9f5-47f6-eff6-be200cfc72c7",
+          "source": "f70e32e0-aa9f-466c-f99d-634e784f033d",
+          "output": "@seqout",
+          "target": "40e88816-ced6-43fc-ee75-14faafcdd28c",
+          "input": "@seqin"
         }
       ],
       "localVariables": [
@@ -865,6 +973,14 @@
           "name": "slider_value",
           "type": "integer",
           "defaultValue": "0",
+          "persistent": false,
+          "native": false
+        },
+        {
+          "objID": "2c4872f9-2f5a-4f99-fae9-0ea977f5f47b",
+          "name": "led_active",
+          "type": "boolean",
+          "defaultValue": "false",
           "persistent": false,
           "native": false
         }

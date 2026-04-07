@@ -13,7 +13,7 @@
 objects_t objects;
 
 static const char *screen_names[] = { "Main", "Page2" };
-static const char *object_names[] = { "main", "page2", "obj0", "label_test", "obj1", "obj2", "slider1", "obj3", "obj4", "obj5" };
+static const char *object_names[] = { "main", "page2", "obj0", "label_test", "obj1", "obj2", "slider1", "obj3", "obj4", "onboard_led", "obj5" };
 
 //
 // Event handlers
@@ -65,6 +65,17 @@ static void event_handler_cb_page2_obj3(lv_event_t *e) {
     if (event == LV_EVENT_PRESSED) {
         e->user_data = (void *)0;
         flowPropagateValueLVGLEvent(flowState, 3, 0, e);
+    }
+}
+
+static void event_handler_cb_page2_onboard_led(lv_event_t *e) {
+    lv_event_code_t event = lv_event_get_code(e);
+    void *flowState = lv_event_get_user_data(e);
+    (void)flowState;
+    
+    if (event == LV_EVENT_PRESSED) {
+        e->user_data = (void *)0;
+        flowPropagateValueLVGLEvent(flowState, 6, 0, e);
     }
 }
 
@@ -122,7 +133,7 @@ void create_screen_main() {
         {
             lv_obj_t *obj = lv_button_create(parent_obj);
             objects.obj1 = obj;
-            lv_obj_set_pos(obj, 275, 203);
+            lv_obj_set_pos(obj, 275, 202);
             lv_obj_set_size(obj, 47, 39);
             lv_obj_add_event_cb(obj, event_handler_cb_main_obj1, LV_EVENT_ALL, flowState);
             lv_obj_set_style_bg_color(obj, lv_color_hex(0xff59b901), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -188,7 +199,7 @@ void create_screen_page2() {
         {
             lv_obj_t *obj = lv_button_create(parent_obj);
             objects.obj3 = obj;
-            lv_obj_set_pos(obj, -2, 203);
+            lv_obj_set_pos(obj, 277, 201);
             lv_obj_set_size(obj, 47, 39);
             lv_obj_add_event_cb(obj, event_handler_cb_page2_obj3, LV_EVENT_ALL, flowState);
             lv_obj_set_style_bg_color(obj, lv_color_hex(0xff59b901), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -216,6 +227,15 @@ void create_screen_page2() {
             lv_obj_set_style_text_color(obj, lv_color_hex(0xff10709c), LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_label_set_text(obj, "");
+        }
+        {
+            // onboard_led
+            lv_obj_t *obj = lv_led_create(parent_obj);
+            objects.onboard_led = obj;
+            lv_obj_set_pos(obj, 11, 196);
+            lv_obj_set_size(obj, 32, 32);
+            lv_led_set_color(obj, lv_color_hex(0xff00ff00));
+            lv_obj_add_event_cb(obj, event_handler_cb_page2_onboard_led, LV_EVENT_ALL, flowState);
         }
     }
     
@@ -249,6 +269,17 @@ void tick_screen_page2() {
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.obj4;
             lv_label_set_text(objects.obj4, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        int32_t new_val = evalIntegerProperty(flowState, 6, 3, "Failed to evaluate Brightness in Led widget");
+        if (new_val < 0) new_val = 0;
+        else if (new_val > 255) new_val = 255;
+        int32_t cur_val = lv_led_get_brightness(objects.onboard_led);
+        if (new_val != cur_val) {
+            tick_value_change_obj = objects.onboard_led;
+            lv_led_set_brightness(objects.onboard_led, new_val);
             tick_value_change_obj = NULL;
         }
     }

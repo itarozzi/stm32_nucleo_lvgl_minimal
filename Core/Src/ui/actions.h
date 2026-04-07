@@ -8,6 +8,7 @@ extern "C" {
 #endif
 
 extern void action_btn_pressed(lv_event_t * e);
+extern void action_switch_led(lv_event_t * e);
 
 #ifdef __cplusplus
 }
