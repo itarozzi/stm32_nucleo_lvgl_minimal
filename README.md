@@ -3,17 +3,24 @@ STM32 Nucleo-F446RE LVGL9 Minimal Project
 
 Testing LVGL9 with STM32 Nucleo-F446RE demoboard.
 
+
+
+
 Use LVGL v9.2.3
+
 https://lvgl.io/
 
 
 Based on TFT and Touch Drivers by Kevin Fox (kpf5297)
+
 https://github.com/kpf5297/ILI9341-TFT-LVGL
 
 
 Use EEZ-Studio v0.26.2 and EEZ-Flow to create UI and some UI automations.
+
 https://www.envox.eu/studio/studio-introduction/
 
+I use a TFT Display 2.8" 320x240 with resistive touch, both using SPI. The TFT uses the  ILI9341 SOC Driver and the touch uses the XPT2046 controller.
 
 ![demo1](./docs/demo_img2.jpg)
 
@@ -51,6 +58,9 @@ I use FreeRTOS as described in Kevin Fox examples; but created also a minimal al
 - created a stub in `freertos.c` for `osThreadDetach()`
 
 
+![cubemx_options1](./docs/cubemx_img1.png)
+
+
 ## Notes on GPIO and SPI
 
 - used SPI2 (TFT) and SPI3 (TP) because SPI1 is already used in default Nucleo configuration
@@ -58,6 +68,13 @@ I use FreeRTOS as described in Kevin Fox examples; but created also a minimal al
 
 
 ## Wiring 
+
+The Display is powered at 5V. It is wired directly to the morpho connector of the Nucelo using 2 SPI buses and some GPIO (used for CD, DC, RESET, Touch IRQ...).
+
+SPI2 is used to communicate woth TFT Display.
+
+SPI3 is used for touch panel.
+
 
 | Pin  | Pin Name | Destination | Label             | Function    |
 |------|----------|-------------|-------------------|-------------|
@@ -78,9 +95,10 @@ I use FreeRTOS as described in Kevin Fox examples; but created also a minimal al
 
 
 
+
 ![cubemx_options2](./docs/cubemx_img2.png)
 
 ![cubemx_options3](./docs/cubemx_img3.png)
 
-![cubemx_options1](./docs/cubemx_img1.png)
+
 
