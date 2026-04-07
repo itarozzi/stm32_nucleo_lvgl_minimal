@@ -21,12 +21,14 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "main.h"
+#include "ui_logic.h"
 #include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "ui/screens.h"
 #include "ui/ui.h"
+#include "ui/vars.h"
 #include "lvgl.h"
 #include "TouchController.h"
 #include "usart.h"
@@ -181,6 +183,8 @@ void lvglTimerCallback(void *argument) {
 
 }
 
+
+bool changed_ok = false;
 void startLvglTask(void *argument) {
     for (;;) {
         osDelay(5);
@@ -192,7 +196,25 @@ void startLvglTask(void *argument) {
         ui_tick();
         // lv_unlock();
 
-         HAL_UART_Transmit(&huart2, (uint8_t*)"LVGL task\r\n", 20, 1000);
+
+        if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET)
+        {
+            // Button pressed
+            if (!changed_ok) {
+              changed_ok = true;
+              blue_button_press_cnt++;
+              set_var_blue_button_press_cnt(blue_button_press_cnt);
+            }
+        }
+        else
+        {
+            // Button released
+            changed_ok = false;
+        }
+
+
+
+         // HAL_UART_Transmit(&huart2, (uint8_t*)"LVGL task\r\n", 20, 1000);
     }
 }
 

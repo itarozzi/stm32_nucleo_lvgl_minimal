@@ -61,6 +61,9 @@ lv_obj_t * time_label = NULL;
 lv_obj_t * date_label = NULL;
 
 u_int64_t press_counter = 0;
+
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

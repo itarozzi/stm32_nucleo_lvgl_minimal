@@ -18,6 +18,9 @@ enum FlowGlobalVariables {
 
 // Native global variables
 
+extern int32_t get_var_blue_button_press_cnt();
+extern void set_var_blue_button_press_cnt(int32_t value);
+
 #ifdef __cplusplus
 }
 #endif

@@ -13,7 +13,7 @@
 objects_t objects;
 
 static const char *screen_names[] = { "Main", "Page2" };
-static const char *object_names[] = { "main", "page2", "obj0", "label_test", "obj1", "obj2", "slider1", "obj3", "obj4", "onboard_led", "obj5" };
+static const char *object_names[] = { "main", "page2", "obj0", "label_test", "obj1", "label_blue_button", "obj2", "slider1", "obj3", "obj4", "onboard_led", "obj5" };
 
 //
 // Event handlers
@@ -104,7 +104,7 @@ void create_screen_main() {
         {
             lv_obj_t *obj = lv_button_create(parent_obj);
             objects.obj0 = obj;
-            lv_obj_set_pos(obj, 47, 127);
+            lv_obj_set_pos(obj, 47, 112);
             lv_obj_set_size(obj, 226, 50);
             lv_obj_add_event_cb(obj, event_handler_cb_main_obj0, LV_EVENT_ALL, flowState);
             {
@@ -123,7 +123,7 @@ void create_screen_main() {
             // labelTest
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.label_test = obj;
-            lv_obj_set_pos(obj, 0, -40);
+            lv_obj_set_pos(obj, 0, -50);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_set_style_text_font(obj, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -151,6 +151,17 @@ void create_screen_main() {
                 }
             }
         }
+        {
+            // labelBlueButton
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            objects.label_blue_button = obj;
+            lv_obj_set_pos(obj, 9, 210);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            lv_obj_set_style_text_font(obj, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_align(obj, LV_ALIGN_DEFAULT, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_label_set_text(obj, "");
+        }
     }
     
     tick_screen_main();
@@ -165,6 +176,15 @@ void tick_screen_main() {
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.obj2;
             lv_label_set_text(objects.obj2, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        const char *new_val = evalTextProperty(flowState, 7, 3, "Failed to evaluate Text in Label widget");
+        const char *cur_val = lv_label_get_text(objects.label_blue_button);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.label_blue_button;
+            lv_label_set_text(objects.label_blue_button, new_val);
             tick_value_change_obj = NULL;
         }
     }
@@ -192,7 +212,7 @@ void create_screen_page2() {
             // slider1
             lv_obj_t *obj = lv_arc_create(parent_obj);
             objects.slider1 = obj;
-            lv_obj_set_pos(obj, 85, 68);
+            lv_obj_set_pos(obj, 85, 63);
             lv_obj_set_size(obj, 150, 150);
             lv_obj_add_event_cb(obj, event_handler_cb_page2_slider1, LV_EVENT_ALL, flowState);
         }
@@ -220,7 +240,7 @@ void create_screen_page2() {
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.obj4 = obj;
-            lv_obj_set_pos(obj, 7, 23);
+            lv_obj_set_pos(obj, 7, 14);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_font(obj, &lv_font_montserrat_24, LV_PART_MAIN | LV_STATE_DEFAULT);

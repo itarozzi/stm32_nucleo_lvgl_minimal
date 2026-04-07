@@ -22,6 +22,7 @@ typedef struct _objects_t {
     lv_obj_t *obj0;
     lv_obj_t *label_test;
     lv_obj_t *obj1;
+    lv_obj_t *label_blue_button;
     lv_obj_t *obj2;
     lv_obj_t *slider1;
     lv_obj_t *obj3;

@@ -107,7 +107,16 @@
   },
   "variables": {
     "objID": "c6c71e16-53e1-217f-d03b-cef56c6b037a",
-    "globalVariables": [],
+    "globalVariables": [
+      {
+        "objID": "f24a9c1d-fb8a-4cbb-e158-18cf099a317b",
+        "name": "blue_button_press_cnt",
+        "type": "integer",
+        "defaultValue": "0",
+        "persistent": false,
+        "native": true
+      }
+    ],
     "structures": [],
     "enums": []
   },
@@ -207,7 +216,7 @@
               "objID": "ec3a9c4d-535d-4e4d-e252-24c5d3fa4e37",
               "type": "LVGLButtonWidget",
               "left": 47,
-              "top": 127,
+              "top": 112,
               "width": 226,
               "height": 50,
               "customInputs": [],
@@ -305,7 +314,7 @@
               "objID": "98f30334-ea14-4369-9122-d445f1bc624d",
               "type": "LVGLLabelWidget",
               "left": 0,
-              "top": -40,
+              "top": -50,
               "width": 66,
               "height": 22,
               "customInputs": [],
@@ -458,6 +467,58 @@
               },
               "group": "",
               "groupIndex": 0
+            },
+            {
+              "objID": "1b1d310a-9572-45d9-f888-f24c252e8204",
+              "type": "LVGLLabelWidget",
+              "left": 9,
+              "top": 210,
+              "width": 444,
+              "height": 22,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "659a21bd-dadf-47f2-e2d8-2b23b25a9ba1",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "labelBlueButton",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "localStyles": {
+                "objID": "208c0b3a-69ce-4253-bc42-a67c54ad064b",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "text_font": "MONTSERRAT_20",
+                      "text_align": "LEFT",
+                      "align": "DEFAULT"
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": "\"Blue Btn Press: \" + blue_button_press_cnt",
+              "textType": "expression",
+              "longMode": "WRAP",
+              "recolor": false
             }
           ],
           "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
@@ -482,8 +543,8 @@
         {
           "objID": "87452e02-f74e-44a1-d0f2-e62a35ace901",
           "type": "LVGLActionComponent",
-          "left": 383,
-          "top": 221,
+          "left": 414,
+          "top": 240,
           "width": 293,
           "height": 54,
           "customInputs": [],
@@ -504,6 +565,47 @@
               "useStackType": "literal"
             }
           ]
+        },
+        {
+          "objID": "4e279c84-77c7-4e42-dae5-e146d7f09622",
+          "type": "WatchVariableActionComponent",
+          "left": 94,
+          "top": 381,
+          "width": 203,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "variable": "blue_button_press_cnt"
+        },
+        {
+          "objID": "cfafe29e-021f-4949-8cc3-b3884252664b",
+          "type": "CompareActionComponent",
+          "left": 344,
+          "top": 424,
+          "width": 217,
+          "height": 70,
+          "customInputs": [],
+          "customOutputs": [],
+          "A": "blue_button_press_cnt",
+          "B": "5",
+          "operator": ">="
+        },
+        {
+          "objID": "96186be4-fa44-47d8-98b9-b1c47abab7e3",
+          "type": "SetVariableActionComponent",
+          "left": 670,
+          "top": 476,
+          "width": 202,
+          "height": 57,
+          "customInputs": [],
+          "customOutputs": [],
+          "entries": [
+            {
+              "objID": "a6a661d7-164d-4a75-9bec-32f65ba203cc",
+              "variable": "blue_button_press_cnt",
+              "value": "0"
+            }
+          ]
         }
       ],
       "connectionLines": [
@@ -512,6 +614,20 @@
           "source": "9c1a748e-f54a-48cd-c2d7-53e04a914eed",
           "output": "PRESSED",
           "target": "87452e02-f74e-44a1-d0f2-e62a35ace901",
+          "input": "@seqin"
+        },
+        {
+          "objID": "af675ec0-fde0-41d9-b71a-0f3ca6e68f1d",
+          "source": "4e279c84-77c7-4e42-dae5-e146d7f09622",
+          "output": "variable",
+          "target": "cfafe29e-021f-4949-8cc3-b3884252664b",
+          "input": "@seqin"
+        },
+        {
+          "objID": "57fed65d-9bff-4622-ffe6-e42c33d21506",
+          "source": "cfafe29e-021f-4949-8cc3-b3884252664b",
+          "output": "True",
+          "target": "96186be4-fa44-47d8-98b9-b1c47abab7e3",
           "input": "@seqin"
         }
       ],
@@ -599,7 +715,7 @@
               "objID": "edfbc60e-bd60-43f2-e990-ecaa88ed7ea1",
               "type": "LVGLArcWidget",
               "left": 85,
-              "top": 68,
+              "top": 63,
               "width": 150,
               "height": 150,
               "customInputs": [],
@@ -769,7 +885,7 @@
               "objID": "777268e0-e3df-4f4c-ad54-e0bf06f0b12a",
               "type": "LVGLLabelWidget",
               "left": 7,
-              "top": 23,
+              "top": 14,
               "width": 219,
               "height": 27,
               "customInputs": [],

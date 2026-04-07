@@ -1,12 +1,15 @@
 #include "main.h"
+#include "ui_logic.h"
 #include "ui/actions.h"
 #include "ui/ui.h"
 #include "ui/screens.h"
+#include "ui/vars.h"
 
 #include <sys/types.h>
 #include <sys/time.h>
-u_int64_t click_cnt = 0;
 
+u_int64_t click_cnt = 0;
+int32_t blue_button_press_cnt = 0;
 
 int _gettimeofday(struct timeval *tv, void *tz) {
     if (tv) {
@@ -30,4 +33,19 @@ void action_btn_pressed(lv_event_t *e) {
 //  Callback from UI used to command Nucleo builtin led
 void action_switch_led(lv_event_t *e) {
     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+}
+
+
+
+
+
+/*** Getter and Setter for Native Variables  */
+
+
+int32_t get_var_blue_button_press_cnt() {
+    return blue_button_press_cnt;
+}
+
+void set_var_blue_button_press_cnt(int32_t value) {
+    blue_button_press_cnt = value;
 }
