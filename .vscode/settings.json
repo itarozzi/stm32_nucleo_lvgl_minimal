@@ -1,0 +1,7 @@
+{
+    "FW_NAME": "nucleo_lvgl_minimal",
+    // "BUILD_DIR": "./build"
+    "BUILD_DIR": "/tmp/stm32_build"
+   
+   
+}
