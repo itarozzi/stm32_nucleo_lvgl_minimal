@@ -1,3 +1,10 @@
+
+/** 
+
+Credits: https://github.com/Bodmer/TFT_eSPI for commands init sequence 
+
+ */
+
 #include "ILI9341.h"
 #include "main.h"
 #include "lvgl.h"
@@ -60,74 +67,117 @@ void ILI9341_Init(const ILI9341_Config_t *config) {
     ili_config = config;
     ILI9341_Reset();
 
-    ILI9341_WriteCommand(0x01);
+    ILI9341_WriteCommand(0x01); // Software reset
     DISPLAY_DELAY_MS(10);
-    ILI9341_WriteCommand(0x28);
+    ILI9341_WriteCommand(0x28); // Display off
 
-    ILI9341_WriteCommand(0xCF);
+    // 0xEF — Inter register enable (required by some panels before cmd 0xCF)
+    ILI9341_WriteCommand(0xEF);
+    ILI9341_WriteData(0x03);
+    ILI9341_WriteData(0x80);
+    ILI9341_WriteData(0x02);
+
+    ILI9341_WriteCommand(0xCF); // Power control B
     ILI9341_WriteData(0x00);
     ILI9341_WriteData(0xC1);
     ILI9341_WriteData(0x30);
 
-    ILI9341_WriteCommand(0xED);
+    ILI9341_WriteCommand(0xED); // Power on sequence control
     ILI9341_WriteData(0x64);
     ILI9341_WriteData(0x03);
     ILI9341_WriteData(0x12);
     ILI9341_WriteData(0x81);
 
-    ILI9341_WriteCommand(0xE8);
+    ILI9341_WriteCommand(0xE8); // Driver timing control A
     ILI9341_WriteData(0x85);
     ILI9341_WriteData(0x00);
     ILI9341_WriteData(0x78);
 
-    ILI9341_WriteCommand(0xCB);
+    ILI9341_WriteCommand(0xCB); // Power control A
     ILI9341_WriteData(0x39);
     ILI9341_WriteData(0x2C);
     ILI9341_WriteData(0x00);
     ILI9341_WriteData(0x34);
     ILI9341_WriteData(0x02);
 
-    ILI9341_WriteCommand(0xF7);
+    ILI9341_WriteCommand(0xF7); // Pump ratio control
     ILI9341_WriteData(0x20);
 
-    ILI9341_WriteCommand(0xEA);
+    ILI9341_WriteCommand(0xEA); // Driver timing control B
     ILI9341_WriteData(0x00);
     ILI9341_WriteData(0x00);
 
-    ILI9341_WriteCommand(0xC0);
+    ILI9341_WriteCommand(0xC0); // Power control 1 — VRH[5:0]
     ILI9341_WriteData(0x23);
 
-    ILI9341_WriteCommand(0xC1);
+    ILI9341_WriteCommand(0xC1); // Power control 2 — SAP[2:0]; BT[3:0]
     ILI9341_WriteData(0x10);
 
-    ILI9341_WriteCommand(0xC5);
-    ILI9341_WriteData(0x3e);
+    ILI9341_WriteCommand(0xC5); // VCM control 1
+    ILI9341_WriteData(0x3E);
     ILI9341_WriteData(0x28);
 
-    ILI9341_WriteCommand(0xC7);
+    ILI9341_WriteCommand(0xC7); // VCM control 2
     ILI9341_WriteData(0x86);
 
-    ILI9341_WriteCommand(0x3A);
+    ILI9341_WriteCommand(0x3A); // Pixel format — 16 bit RGB565
     ILI9341_WriteData(0x55);
 
-    ILI9341_WriteCommand(0xB1);
+    // Frame rate: 0x13 = ~100 Hz (was 0x18 = ~70 Hz)
+    ILI9341_WriteCommand(0xB1); // Frame rate control (normal mode)
     ILI9341_WriteData(0x00);
-    ILI9341_WriteData(0x18);
+    ILI9341_WriteData(0x13); // 0x18 ~70Hz | 0x1B ~65Hz (default) | 0x13 ~100Hz
 
-    ILI9341_WriteCommand(0xB6);
+    ILI9341_WriteCommand(0xB6); // Display function control
     ILI9341_WriteData(0x08);
     ILI9341_WriteData(0x82);
     ILI9341_WriteData(0x27);
 
-    ILI9341_WriteCommand(0xF2);
+    ILI9341_WriteCommand(0xF2); // 3-gamma function disable
     ILI9341_WriteData(0x00);
 
-    ILI9341_WriteCommand(0x26);
+    ILI9341_WriteCommand(0x26); // Gamma curve selected
     ILI9341_WriteData(0x01);
 
-    ILI9341_WriteCommand(0x11);
+    // [FIX 3] Gamma correction — positive (0xE0) and negative (0xE1) curves
+    // Same values used in  TFT_eSPI; better results on mid-tones
+    ILI9341_WriteCommand(0xE0); // GMCTRP1 — Set gamma (positive)
+    ILI9341_WriteData(0x0F);
+    ILI9341_WriteData(0x31);
+    ILI9341_WriteData(0x2B);
+    ILI9341_WriteData(0x0C);
+    ILI9341_WriteData(0x0E);
+    ILI9341_WriteData(0x08);
+    ILI9341_WriteData(0x4E);
+    ILI9341_WriteData(0xF1);
+    ILI9341_WriteData(0x37);
+    ILI9341_WriteData(0x07);
+    ILI9341_WriteData(0x10);
+    ILI9341_WriteData(0x03);
+    ILI9341_WriteData(0x0E);
+    ILI9341_WriteData(0x09);
+    ILI9341_WriteData(0x00);
+
+    ILI9341_WriteCommand(0xE1); // GMCTRN1 — Set gamma (negative)
+    ILI9341_WriteData(0x00);
+    ILI9341_WriteData(0x0E);
+    ILI9341_WriteData(0x14);
+    ILI9341_WriteData(0x03);
+    ILI9341_WriteData(0x11);
+    ILI9341_WriteData(0x07);
+    ILI9341_WriteData(0x31);
+    ILI9341_WriteData(0xC1);
+    ILI9341_WriteData(0x48);
+    ILI9341_WriteData(0x08);
+    ILI9341_WriteData(0x0F);
+    ILI9341_WriteData(0x0C);
+    ILI9341_WriteData(0x31);
+    ILI9341_WriteData(0x36);
+    ILI9341_WriteData(0x0F);
+
+    ILI9341_WriteCommand(0x11); // Sleep out
     DISPLAY_DELAY_MS(120);
-    ILI9341_WriteCommand(0x29);
+    ILI9341_WriteCommand(0x29); // Display on
 }
 
 void ILI9341_FillScreen(uint16_t color) {
@@ -168,19 +218,19 @@ void ILI9341_FillScreen(uint16_t color) {
 
 void ILI9341_SetRotation(uint8_t m)
 {
-    ILI9341_WriteCommand(0x36);
+    ILI9341_WriteCommand(0x36); // MADCTL
     switch (m) {
         case 0:
-            ILI9341_WriteData(0x48); // MX | BGR
+            ILI9341_WriteData(0x48); // MX | BGR  — portrait
             break;
         case 1:
-            ILI9341_WriteData(0x28); // MY | BGR
+            ILI9341_WriteData(0x28); // MV | BGR  — landscape 90°
             break;
         case 2:
-            ILI9341_WriteData(0x88); // MX | MY | BGR
+            ILI9341_WriteData(0x88); // MY | BGR  — portrait 180°
             break;
         case 3:
-            ILI9341_WriteData(0xE8); // MX | MY | MV | BGR (landscape)
+            ILI9341_WriteData(0xE8); // MY | MX | MV | BGR — landscape 270°
             break;
     }
 }
