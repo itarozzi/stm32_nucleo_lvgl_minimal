@@ -5,10 +5,10 @@
 #include "ui/screens.h"
 #include "ui/vars.h"
 
-#include <sys/types.h>
+#include <stdint.h>
 #include <sys/time.h>
 
-u_int64_t click_cnt = 0;
+uint32_t click_cnt = 0;
 int32_t blue_button_press_cnt = 0;
 
 int _gettimeofday(struct timeval *tv, void *tz) {

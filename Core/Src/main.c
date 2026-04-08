@@ -27,7 +27,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
-#include <sys/types.h>
+#include <stdint.h>
 
 #include "ui/ui.h"
 #include "lvgl.h"
@@ -60,7 +60,7 @@ void load_gui(void);
 lv_obj_t * time_label = NULL;
 lv_obj_t * date_label = NULL;
 
-u_int64_t press_counter = 0;
+uint32_t press_counter = 0;
 
 
 
@@ -155,7 +155,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  u_int64_t cnt = 0;
+  uint32_t cnt = 0;
   while (1)
   {
 
