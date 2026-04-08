@@ -26,15 +26,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "ui/screens.h"
 #include "ui/ui.h"
 #include "ui/vars.h"
 #include "lvgl.h"
 #include "TouchController.h"
-#include "usart.h"
-#include <sys/types.h>
-// then put this into ui.h header file to include here
-extern lv_obj_t *time_label;
 
 /* USER CODE END Includes */
 
@@ -45,6 +40,8 @@ extern lv_obj_t *time_label;
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define LVGL_TASK_WAKE_FLAG      (1UL << 0)
+#define LVGL_TASK_PERIOD_MS      5U
 
 /* USER CODE END PD */
 
@@ -55,10 +52,7 @@ extern lv_obj_t *time_label;
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-u_int64_t cnt = 0;
-
-osTimerId_t lvglTimerHandle;
-const osTimerAttr_t lvglTimer_attributes = { .name = "lvglTimer" };
+osThreadId_t lvglTaskHandle;
 
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
@@ -92,12 +86,9 @@ void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
   */
 void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
-  lvglTimerHandle = osTimerNew(lvglTimerCallback, osTimerPeriodic, NULL, &lvglTimer_attributes);
-
-  osThreadId_t lvglTaskHandle;
   const osThreadAttr_t lvglTask_attributes = {
     .name       = "lvglTask",
-    .stack_size = 2048 * 4,           // 8 KB — increase if you see stack overflow
+    .stack_size = 2048 * 4,
     .priority   = osPriorityLow,
   };
 
@@ -114,7 +105,7 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_SEMAPHORES */
 
   /* USER CODE BEGIN RTOS_TIMERS */
-  osTimerStart(lvglTimerHandle, 10);
+  (void)lvglTimerCallback;
 
   /* USER CODE END RTOS_TIMERS */
 
@@ -148,6 +139,7 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
+  (void)argument;
   /* Infinite loop */
   for(;;)
   {
@@ -160,61 +152,36 @@ void StartDefaultTask(void *argument)
 /* USER CODE BEGIN Application */
 
 void lvglTimerCallback(void *argument) {
-    // printf("STM32 LVGL tick");
-    // lv_tick_inc(1);
-
-    
-
-    
-    // HAL_UART_Transmit(&huart2, (uint8_t*)"thick\r\n", 8, 1000);
-
-    cnt++;
-    if (cnt >= 100) {
-      cnt = 0;
-      // lv_lock();
-
-      //lv_label_set_text_fmt(objects.label_test, "%d", HAL_GetTick());
-
-      // lv_label_set_text_fmt(time_label, "%d", HAL_GetTick());
-      //  lv_unlock();
-
-      HAL_UART_Transmit(&huart2, (uint8_t*)"thick2\r\n", 10, 1000);
-    }
-
+    (void)argument;
 }
 
 
-bool changed_ok = false;
+static bool button_was_pressed = false;
 void startLvglTask(void *argument) {
+    uint32_t flags;
+
+    (void)argument;
+
     for (;;) {
-        osDelay(5);
+        flags = osThreadFlagsWait(LVGL_TASK_WAKE_FLAG, osFlagsWaitAny, LVGL_TASK_PERIOD_MS);
+        (void)flags;
+
         TouchController_Poll();
-        
         lv_timer_handler();
-
-        // lv_lock();
         ui_tick();
-        // lv_unlock();
-
 
         if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET)
         {
-            // Button pressed
-            if (!changed_ok) {
-              changed_ok = true;
+            if (!button_was_pressed) {
+              button_was_pressed = true;
               blue_button_press_cnt++;
               set_var_blue_button_press_cnt(blue_button_press_cnt);
             }
         }
         else
         {
-            // Button released
-            changed_ok = false;
+            button_was_pressed = false;
         }
-
-
-
-         // HAL_UART_Transmit(&huart2, (uint8_t*)"LVGL task\r\n", 20, 1000);
     }
 }
 
