@@ -108,7 +108,7 @@ I use EEZ-Studio to design UI and generate LVGL code.  The demo consists of 2 pa
 
 I also enabled EEZ-Flow to use some UI automation using visual programming. Usefull for page changes, set/display variables, ...
 
-The vars and action described here are just for educational purpose, to demonstrate how to make UI and code interact.
+The vars and actions described here are just for educational purpose, to demonstrate how to make UI and code interact.
 
 
 ## Native Actions: Button callback
@@ -121,7 +121,7 @@ You have to implment action callback as suggested by EEZ-Studio. I created a ded
 
 ## Native Action: Switch Led
 
-Created a Native User Actions `switch_led`. Then created a SetVariable Flow Node connected to the PRESSED event of the Led in Page2. It switch an internal variable `led_active' used to set the led brightness. Finally the flow calls the `switch_led` native actions, and the callback associated.
+Created a Native User Actions `switch_led`. Then created a SetVariable Flow Node connected to the PRESSED event of the Led in Page2. It switch an internal variable `led_active` used to set the led brightness. Finally the flow calls the `switch_led` native actions, and the callback associated.
 The callback is defined in `ui_logic.c` and toggle the physical LED connected to pin PA5.
 
 This demonstrate how to execute HW-related code when a UI action is performed.
@@ -135,7 +135,7 @@ Created a Native Variable `blue_button_press_cnt` as integer. As suggested by EE
 
 Finally I read the state of the on-board blue button (connected to `GPIO_EXTI13`) and when pressed I increment the value of blue_button_press_cnt, using the setter function. This is notified to UI. The new value is displayed in the `labelBlueButton` in Main Page.
 
-The Flow Node `Watch`, `Compare` and `SetVariable` are used to read the value of `blue_button_press_cnt` and reset it when the value of 5 is reached.
+The Flow Nodes `Watch`, `Compare` and `SetVariable` are used to read the value of `blue_button_press_cnt` and reset it when the value of 5 is reached.
 
 This demonstrate how to set UI variables depending on HW states or values, display the values in UI and use EEZ-Flow to perform additional logic.
 
