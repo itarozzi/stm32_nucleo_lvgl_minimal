@@ -4,7 +4,7 @@
         {
             "name": "Cortex Debug",
             "cwd": "${workspaceRoot}",
-            "executable": "/tmp/stm32_build/nucleo_lvgl_prj1/debug/nucleo_lvgl_prj1.elf",
+            "executable": "/tmp/stm32_build/nucleo_lvgl_minimal/debug/nucleo_lvgl_minimal.elf",
             "request": "launch",
             "type": "cortex-debug",
             "runToEntryPoint": "main",
